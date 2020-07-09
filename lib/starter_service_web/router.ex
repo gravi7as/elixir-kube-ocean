@@ -7,7 +7,7 @@ defmodule StarterServiceWeb.Router do
 
   scope "/api", StarterServiceWeb do
     pipe_through :api
-    resources "/ping", PingController, except: [:new, :edit]
+    resources "/ping", PingController, only: [:index]
   end
 
 
