@@ -2,30 +2,40 @@ name: Elixir CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master, release/*]
   pull_request:
-    branches: [ master ]
-    
+    branches: [master]
+
 jobs:
   build:
-
-    name: Build and test
+    name: build and test
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Elixir
-      uses: actions/setup-elixir@v1
-      with:
-        elixir-version: '1.10.4' # Define the elixir version [required]
-        otp-version: '22.3' # Define the OTP version [required]
-    - name: Restore dependencies cache
-      uses: actions/cache@v2
-      with:
-        path: deps
-        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-        restore-keys: ${{ runner.os }}-mix-
-    - name: Install dependencies
-      run: mix deps.get
-    - name: Run tests
-      run: mix test
+      - name: checkout master
+        uses: actions/checkout@v2
+
+      - name: set up Elixir
+        uses: actions/setup-elixir@v1
+        with:
+          elixir-version: "1.10.4"
+          otp-version: "22.3"
+
+      - name: update SHA
+        run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/site/_meta
+
+      - name: build container image
+        run: docker build -t registry.digitalocean.com/profitmargin/elixir-kube-ocean:$(echo $GITHUB_SHA | head -c7) .
+
+      - name: restore dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+
+      - name: install dependencies
+        run: mix deps.get
+
+      - name: run tests
+        run: mix test
