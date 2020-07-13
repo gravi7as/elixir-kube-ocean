@@ -26,7 +26,7 @@ FROM erlang:22 as runtime
 
 WORKDIR /usr/local/starter_service
 
-COPY --from=builder /opt/release/starter_service .
+COPY --from=0 /opt/release/starter_service .
 
 CMD [ "bin/starter_service", "start" ]
 
