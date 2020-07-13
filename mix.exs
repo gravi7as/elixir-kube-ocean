@@ -36,6 +36,7 @@ defmodule StarterService.MixProject do
       {:gettext, "~> 0.11"},
       {:hackney, "~> 1.15.2"},
       {:jason, "~> 1.0"},
+      {:peerage, "~> 1.0"},
       {:phoenix_live_dashboard, "~> 0.2.0"},
       {:phoenix, "~> 1.5.3"},
       {:plug_cowboy, "~> 2.0"},
