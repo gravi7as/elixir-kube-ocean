@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: starter-service-deployment
+  labels:
+    app: starter-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: starter-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 34%
+      maxUnavailable: 34%
+  template:
+    metadata:
+      name: starter-service
+      labels:
+        app: starter-service
+    spec:
+      imagePullSecrets:
+        - name: do-registry
+      containers:
+        - name: starter-service
+          image: registry.digitalocean.com/profitmargin/starter_service
+          env:
+            - name: APP_HOST
+              value: starter-service.com
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: PORT
+              value: "4000"
+            - name: RELEASE_COOKIE
+              value: starter-service-secret-cookie
+            - name: SECRET_KEY_BASE
+              value: super-secret-key-base
+            - name: SERVICE_NAME
+              value: starter-service.default.svc.cluster.local
+          resources: {}
+          securityContext:
+            privileged: false
+            procMount: Default
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
