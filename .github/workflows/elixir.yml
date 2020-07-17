@@ -22,7 +22,7 @@ jobs:
           otp-version: "22.3"
 
       - name: build container image
-        run: docker build -t registry.digitalocean.com/profitmargin/elixir-kube-ocean:$(echo $GITHUB_SHA | head -c8) .
+        run: docker build -t registry.digitalocean.com/profitmargin/starter_service:$(echo $GITHUB_SHA | head -c8) .
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -33,4 +33,4 @@ jobs:
         run: doctl registry login --expiry-seconds 600
 
       - name: Push image to DigitalOcean Container Registry
-        run: docker push registry.digitalocean.com/profitmargin/elixir-kube-ocean
+        run: docker push registry.digitalocean.com/profitmargin/starter_service
