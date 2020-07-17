@@ -39,7 +39,7 @@ jobs:
         run: TAG=$(echo $GITHUB_SHA | head -c8) && sed -i 's|<IMAGE>|registry.digitalocean.com/profitmargin/starter_service:'${TAG}'|' $GITHUB_WORKSPACE/k8s/deployment.yaml
 
       - name: Save DigitalOcean kubeconfig
-        run: doctl kubernetes cluster kubeconfig save actions-starter_service-k8s
+        run: doctl kubernetes cluster kubeconfig save profitmargin-cluster
 
       - name: Deploy to DigitalOcean Kubernetes
         run: kubectl apply -f $GITHUB_WORKSPACE/k8s/deployment.yaml
