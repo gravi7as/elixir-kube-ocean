@@ -24,7 +24,7 @@ spec:
         - name: do-registry
       containers:
         - name: starter-service
-          image: registry.digitalocean.com/profitmargin/starter_service
+          image: <IMAGE>
           env:
             - name: APP_HOST
               value: starter-service.com

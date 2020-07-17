@@ -8,20 +8,20 @@ on:
 
 jobs:
   build:
-    name: build and test
+    name: Build and Test
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout master
+      - name: Checkout master
         uses: actions/checkout@v2
 
-      - name: set up Elixir
+      - name: Set up Elixir
         uses: actions/setup-elixir@v1
         with:
           elixir-version: "1.10.4"
           otp-version: "22.3"
 
-      - name: build container image
+      - name: Build container image
         run: docker build -t registry.digitalocean.com/profitmargin/starter_service:$(echo $GITHUB_SHA | head -c8) .
 
       - name: Install doctl
@@ -34,3 +34,15 @@ jobs:
 
       - name: Push image to DigitalOcean Container Registry
         run: docker push registry.digitalocean.com/profitmargin/starter_service
+
+      - name: Update deployment file
+        run: TAG=$(echo $GITHUB_SHA | head -c8) && sed -i 's|<IMAGE>|registry.digitalocean.com/profitmargin/starter_service:'${TAG}'|' $GITHUB_WORKSPACE/k8s/deployment.yaml
+
+      - name: Save DigitalOcean kubeconfig
+        run: doctl kubernetes cluster kubeconfig save actions-starter_service-k8s
+
+      - name: Deploy to DigitalOcean Kubernetes
+        run: kubectl apply -f $GITHUB_WORKSPACE/k8s/deployment.yaml
+
+      - name: Verify deployment
+        run: kubectl rollout status deployment/starter-service-deployment
