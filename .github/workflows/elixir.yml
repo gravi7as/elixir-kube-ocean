@@ -21,9 +21,6 @@ jobs:
           elixir-version: "1.10.4"
           otp-version: "22.3"
 
-      - name: update SHA
-        run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/site/_meta
-
       - name: build container image
         run: docker build -t registry.digitalocean.com/profitmargin/elixir-kube-ocean:$(echo $GITHUB_SHA | head -c7) .
 
