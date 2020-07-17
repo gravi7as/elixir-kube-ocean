@@ -33,4 +33,4 @@ jobs:
         run: doctl registry login --expiry-seconds 600
 
       - name: Push image to DigitalOcean Container Registry
-        run: docker push registry.digitalocean.com/profitmargin
+        run: docker push registry.digitalocean.com/profitmargin/elixir-kube-ocean
