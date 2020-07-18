@@ -31,4 +31,4 @@ COPY --from=0 /opt/release/starter_service .
 CMD [ "bin/starter_service", "start" ]
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=2 \
- CMD nc -vz -w 2 localhost 4000 || exit 1
+ CMD nc -vz -w 2 localhost 80 || exit 1

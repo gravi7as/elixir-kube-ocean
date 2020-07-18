@@ -5,7 +5,7 @@ metadata:
 spec:
   ports:
   - name: http
-    port: 4000
+    port: 80
   selector:
     app: starter-service
   type: LoadBalancer

@@ -33,7 +33,7 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: PORT
-              value: "4000"
+              value: "80"
             - name: RELEASE_COOKIE
               value: starter-service-secret-cookie
             - name: SECRET_KEY_BASE
