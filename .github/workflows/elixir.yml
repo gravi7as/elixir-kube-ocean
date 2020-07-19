@@ -41,7 +41,13 @@ jobs:
       - name: Save DigitalOcean kubeconfig
         run: doctl kubernetes cluster kubeconfig save profitmargin-cluster
 
-      - name: Deploy to DigitalOcean Kubernetes
+      - name: Deploy private service to DigitalOcean Kubernetes
+        run: kubectl apply -f $GITHUB_WORKSPACE/k8s/private.yaml
+
+      - name: Deploy public service to DigitalOcean Kubernetes
+        run: kubectl apply -f $GITHUB_WORKSPACE/k8s/public.yaml
+
+      - name: Deploy deployment to DigitalOcean Kubernetes
         run: kubectl apply -f $GITHUB_WORKSPACE/k8s/deployment.yaml
 
       - name: Verify deployment
