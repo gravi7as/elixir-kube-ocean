@@ -15,8 +15,6 @@ jobs:
     steps:
       - name: Checkout master
         uses: actions/checkout@v2
-        with:
-          path: k8s
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
