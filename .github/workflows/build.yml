@@ -41,6 +41,10 @@ jobs:
           name: k8s-artifact
           path: ${{ github.workspace }}/k8s
 
+      - name: Print Inputs
+        run: |
+              echo "Tags: ${{ github.event.inputs.tags }}" 
+
   deploy_kubernetes:
     needs: build
     name: Deploy to Kubernetes
