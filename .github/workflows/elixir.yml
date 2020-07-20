@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: starter_service-artifact
-          path: ${{ github.workspace }}
+          path: ${{ github.workspace }}/k8s
 
   deploy_kubernetes:
     needs: build
