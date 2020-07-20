@@ -50,7 +50,7 @@ jobs:
 
     steps:
       - name: Download Artifact
-      - uses: actions/actions/download-artifact@v1
+      - uses: actions/download-artifact@v1
         with:
           name: starter_service-artifact
           path: $GITHUB_WORKSPACE
