@@ -1,4 +1,4 @@
-name: Elixir CI
+name: Deploy to Kubernetes
 
 on:
   push:
@@ -7,40 +7,6 @@ on:
     branches: [master]
 
 jobs:
-  build:
-    name: Build, Test, Upload Image
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout master
-        uses: actions/checkout@v2
-
-      - name: Set up Elixir
-        uses: actions/setup-elixir@v1
-        with:
-          elixir-version: "1.10.4"
-          otp-version: "22.3"
-
-      - name: Build container image
-        run: docker build -t registry.digitalocean.com/profitmargin/starter_service:$(echo $GITHUB_SHA | head -c8) .
-
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600
-
-      - name: Push image to DigitalOcean Container Registry
-        run: docker push registry.digitalocean.com/profitmargin/starter_service
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: k8s-artifact
-          path: ${{ github.workspace }}/k8s
-
   deploy_kubernetes:
     needs: build
     name: Deploy to Kubernetes
