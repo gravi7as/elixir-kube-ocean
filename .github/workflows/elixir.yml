@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build and Test
+    name: Build, Test, Upload Image
     runs-on: ubuntu-latest
 
     steps:
@@ -20,6 +20,8 @@ jobs:
         with:
           elixir-version: "1.10.4"
           otp-version: "22.3"
+      - run: mix deps.get
+      - run: mix test
 
       - name: Build container image
         run: docker build -t registry.digitalocean.com/profitmargin/starter_service:$(echo $GITHUB_SHA | head -c8) .
@@ -35,6 +37,12 @@ jobs:
       - name: Push image to DigitalOcean Container Registry
         run: docker push registry.digitalocean.com/profitmargin/starter_service
 
+  deploy_kubernetes:
+    needs: build
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Update deployment file
         run: TAG=$(echo $GITHUB_SHA | head -c8) && sed -i 's|<IMAGE>|registry.digitalocean.com/profitmargin/starter_service:'${TAG}'|' $GITHUB_WORKSPACE/k8s/deployment.yaml
 
