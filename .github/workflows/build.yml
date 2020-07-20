@@ -43,7 +43,7 @@ jobs:
 
       - name: Print Inputs
         run: |
-              echo "Tags: ${{ github.event.inputs.tags }}" 
+          echo "Tags: ${{ github.event.inputs.tags }}"
 
   deploy_kubernetes:
     needs: build
