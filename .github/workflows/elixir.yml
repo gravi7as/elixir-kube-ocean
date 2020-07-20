@@ -42,7 +42,7 @@ jobs:
         run: doctl kubernetes cluster kubeconfig save profitmargin-cluster
 
       - name: Switch Namespace to Development
-        run: kubectl config use-context profitmargin-development
+        run: kubectl config set-context --current --namespace=profitmargin-development
 
       - name: Deploy private service to DigitalOcean Kubernetes
         run: kubectl apply -f $GITHUB_WORKSPACE/k8s/private.yaml
