@@ -4,6 +4,6 @@ defmodule StarterServiceWeb.PingController do
   def index(conn, _params) do
     conn
     |> put_resp_content_type("text/plain")
-    |> send_resp(201, "pong")
+    |> send_resp(201, "pong_v2")
   end
 end

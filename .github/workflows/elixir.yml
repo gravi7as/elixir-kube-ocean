@@ -20,8 +20,6 @@ jobs:
         with:
           elixir-version: "1.10.4"
           otp-version: "22.3"
-      - run: mix deps.get
-      - run: mix test
 
       - name: Build container image
         run: docker build -t registry.digitalocean.com/profitmargin/starter_service:$(echo $GITHUB_SHA | head -c8) .
