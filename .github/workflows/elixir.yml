@@ -38,7 +38,7 @@ jobs:
         run: docker push registry.digitalocean.com/profitmargin/starter_service
 
       - name: Upload Artifact
-      - uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2
         with:
           name: starter_service-artifact
           path: $GITHUB_WORKSPACE
@@ -49,6 +49,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: starter_service-artifact
+          path: $GITHUB_WORKSPACE
+
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
