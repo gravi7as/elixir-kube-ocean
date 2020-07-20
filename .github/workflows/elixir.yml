@@ -37,6 +37,11 @@ jobs:
       - name: Push image to DigitalOcean Container Registry
         run: docker push registry.digitalocean.com/profitmargin/starter_service
 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: starter_service-artifact
+          path: $GITHUB_WORKSPACE/k8s
+  
   deploy_kubernetes:
     needs: build
     name: Deploy to Kubernetes
