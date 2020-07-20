@@ -1,22 +1,18 @@
 name: Deploy to Kubernetes
 
 on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+  workflow_dispatch:
 
 jobs:
   deploy_kubernetes:
-    needs: build
     name: Deploy to Kubernetes
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v1
+      - name: Checkout master
+        uses: actions/checkout@v2
         with:
-          name: k8s-artifact
+          path: k8s
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -27,7 +23,7 @@ jobs:
         run: doctl registry login --expiry-seconds 600
 
       - name: Update deployment file
-        run: TAG=$(echo $GITHUB_SHA | head -c8) && sed -i 's|<IMAGE>|registry.digitalocean.com/profitmargin/starter_service:'${TAG}'|' $GITHUB_WORKSPACE/k8s-artifact/deployment.yaml
+        run: TAG=$(echo $GITHUB_SHA | head -c8) && sed -i 's|<IMAGE>|registry.digitalocean.com/profitmargin/starter_service:'${TAG}'|' $GITHUB_WORKSPACE/k8s/deployment.yaml
 
       - name: Save DigitalOcean kubeconfig
         run: doctl kubernetes cluster kubeconfig save profitmargin-cluster
@@ -36,13 +32,13 @@ jobs:
         run: kubectl config set-context --current --namespace=profitmargin-development
 
       - name: Deploy private service to DigitalOcean Kubernetes
-        run: kubectl apply -f $GITHUB_WORKSPACE/k8s-artifact/private.yaml
+        run: kubectl apply -f $GITHUB_WORKSPACE/k8s/private.yaml
 
       - name: Deploy public service to DigitalOcean Kubernetes
-        run: kubectl apply -f $GITHUB_WORKSPACE/k8s-artifact/public.yaml
+        run: kubectl apply -f $GITHUB_WORKSPACE/k8s/public.yaml
 
       - name: Deploy deployment to DigitalOcean Kubernetes
-        run: kubectl apply -f $GITHUB_WORKSPACE/k8s-artifact/deployment.yaml
+        run: kubectl apply -f $GITHUB_WORKSPACE/k8s/deployment.yaml
 
       - name: Verify deployment
         run: kubectl rollout status deployment/starter-service-deployment
