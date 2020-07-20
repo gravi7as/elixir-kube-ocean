@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: starter_service-artifact
-          path: $GITHUB_WORKSPACE
+          path: ${{ github.workspace }}
 
   deploy_kubernetes:
     needs: build
@@ -53,7 +53,6 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: starter_service-artifact
-          path: $GITHUB_WORKSPACE
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
