@@ -40,7 +40,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: starter_service-artifact
-          path: $GITHUB_WORKSPACE/k8s
+          path: $GITHUB_WORKSPACE
   
   deploy_kubernetes:
     needs: build
@@ -48,6 +48,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 600
+
       - name: Update deployment file
         run: TAG=$(echo $GITHUB_SHA | head -c8) && sed -i 's|<IMAGE>|registry.digitalocean.com/profitmargin/starter_service:'${TAG}'|' $GITHUB_WORKSPACE/k8s/deployment.yaml
 
