@@ -57,12 +57,6 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600
 
-      - name: Download Artifact
-        uses: actions/download-artifact@v1
-        with:
-          name: starter_service-artifact
-          path: $GITHUB_WORKSPACE
-
       - name: Update deployment file
         run: TAG=$(echo $GITHUB_SHA | head -c8) && sed -i 's|<IMAGE>|registry.digitalocean.com/profitmargin/starter_service:'${TAG}'|' $GITHUB_WORKSPACE/k8s/deployment.yaml
 
