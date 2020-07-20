@@ -42,7 +42,7 @@ jobs:
         with:
           name: starter_service-artifact
           path: $GITHUB_WORKSPACE
-  
+
   deploy_kubernetes:
     needs: build
     name: Deploy to Kubernetes
