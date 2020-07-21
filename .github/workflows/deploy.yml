@@ -24,7 +24,7 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600
 
-      - name: Update digital ocean registry secret file
+      - name: Update container registry secret file
         run: sed -i 's/<DOCKER_CONFIG>/${{ secrets.DIGITALOCEAN_REGISTRY }}/g' $GITHUB_WORKSPACE/k8s/do-registry-secret.yaml
 
       - name: Update deployment file
@@ -35,6 +35,9 @@ jobs:
 
       - name: Switch Namespace to Development
         run: kubectl config set-context --current --namespace=profitmargin-development
+
+      - name: Create DigitalOcean container registry secret
+        run: kubectl apply -f $GITHUB_WORKSPACE/k8s/do-registry-secret.yaml
 
       - name: Deploy private service to DigitalOcean Kubernetes
         run: kubectl apply -f $GITHUB_WORKSPACE/k8s/private.yaml
