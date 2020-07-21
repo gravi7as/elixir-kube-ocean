@@ -25,7 +25,7 @@ jobs:
         run: doctl registry login --expiry-seconds 600
 
       - name: Update digital ocean registry secret file
-        run: sed -i 's/<DOCKER_CONFIG>/${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}/g' $GITHUB_WORKSPACE/k8s/do-registry-secret.yaml
+        run: sed -i 's/<DOCKER_CONFIG>/${{ secrets.DIGITALOCEAN_REGISTRY }}/g' $GITHUB_WORKSPACE/k8s/do-registry-secret.yaml
 
       - name: Update deployment file
         run: TAG=$(echo $GITHUB_SHA | head -c8) && sed -i 's|<IMAGE>|registry.digitalocean.com/profitmargin/starter_service:'${TAG}'|' $GITHUB_WORKSPACE/k8s/deployment.yaml
